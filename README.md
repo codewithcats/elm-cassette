@@ -12,3 +12,11 @@ so that development scripts can run correctly
 ```
 npm install -g elm elm-format create-elm-app
 ```
+
+## Production Build
+To build the assets for production deployment, run `build` script:
+
+TODO: add environment variables
+```
+elm-app build
+```
