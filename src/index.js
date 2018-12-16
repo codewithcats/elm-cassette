@@ -5,7 +5,8 @@ import { Elm } from './Main.elm';
 Elm.Main.init({
   node: document.getElementById('root'),
   flags: {
-    spotifyClientId: process.env.ELM_APP_SPOTIFY_CLIENT_ID
+    spotifyClientId: process.env.ELM_APP_SPOTIFY_CLIENT_ID,
+    spotifySecret: process.env.ELM_APP_SPOTIFY_SECRET
   }
 });
 

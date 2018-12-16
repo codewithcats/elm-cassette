@@ -10,7 +10,7 @@ import Html.Attributes exposing (src)
 
 
 type alias Flags =
-    { spotifyClientId : String }
+    { spotifyClientId : String, spotifySecret : String }
 
 
 type alias Model =
