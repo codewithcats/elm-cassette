@@ -14,12 +14,18 @@ type alias Flags =
 
 
 type alias Model =
-    {}
+    { spotifyClientId : String
+    , spotifySecret : String
+    }
 
 
 init : Flags -> ( Model, Cmd Msg )
 init flags =
-    ( {}, Cmd.none )
+    ( { spotifyClientId = flags.spotifyClientId
+      , spotifySecret = flags.spotifySecret
+      }
+    , Cmd.none
+    )
 
 
 
