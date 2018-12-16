@@ -13,6 +13,14 @@ so that development scripts can run correctly
 npm install -g elm elm-format create-elm-app
 ```
 
+## Local Development Server
+To run your local development server:
+
+TODO: add environment variables
+```
+elm-app start
+```
+
 ## Production Build
 To build the assets for production deployment, run `build` script:
 
