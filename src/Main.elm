@@ -4,8 +4,8 @@ import Browser
 import Html exposing (Html, div, h1, img, text)
 import Html.Attributes exposing (src)
 import Http
-import Json.Decode exposing (Decoder, string, succeed)
-import Json.Decode.Pipeline exposing (required)
+import Json.Decode as Decode
+import Json.Decode.Pipeline as DecodePipeline
 
 
 
@@ -18,8 +18,17 @@ type alias Flags =
     }
 
 
-type alias SpotifyAccess =
-    { access_token : String }
+type alias Track =
+    { id : Int
+    , title : String
+    }
+
+
+type alias Chart =
+    { tracks :
+        { data : List Track
+        }
+    }
 
 
 type alias Model =
@@ -33,8 +42,7 @@ init flags =
     ( { spotifyClientId = flags.spotifyClientId
       , spotifySecret = flags.spotifySecret
       }
-    , getSpotifyAccess flags.spotifyClientId
-        flags.spotifySecret
+    , Cmd.none
     )
 
 
@@ -42,9 +50,11 @@ init flags =
 ---- JSON ----
 
 
-spotifyAccessDecoder =
-    succeed SpotifyAccess
-        |> required "access_token" string
+trackDecoder : Decode.Decoder Track
+trackDecoder =
+    Decode.succeed Track
+        |> DecodePipeline.required "id" Decode.int
+        |> DecodePipeline.required "title" Decode.string
 
 
 
@@ -52,7 +62,7 @@ spotifyAccessDecoder =
 
 
 type Msg
-    = UpdateSpotifyAccess (Result Http.Error SpotifyAccess)
+    = FetchChart (Result Http.Error Chart)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -60,25 +70,13 @@ update msg model =
     ( model, Cmd.none )
 
 
-getSpotifyAccess : String -> String -> Cmd Msg
-getSpotifyAccess clientId secret =
-    Http.request
-        { method = "POST"
-        , url = "https://accounts.spotify.com/api/token"
-        , body =
-            Http.stringBody "application/x-www-form-urlencoded"
-                "grant_type=client_credentials"
-        , headers =
-            [ Http.header "Authorization"
-                ("Basic " ++ clientId ++ ":" ++ secret)
-            ]
-        , expect = Http.expectJson UpdateSpotifyAccess spotifyAccessDecoder
-        , timeout = Nothing
-        , tracker = Nothing
-        }
 
-
-
+-- getDeezerChart : Cmd Msg
+-- getDeezerChart =
+--     Http.get
+--         { url = "https://api.deezer.com/chart"
+--         , expect = Http.expectJson FetchChart chartDecoder
+--         }
 ---- VIEW ----
 
 
